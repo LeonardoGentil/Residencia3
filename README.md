@@ -2,34 +2,59 @@
 
 Gateway inteligente sobre a API Filazero para agentes de IA.
 
-## Requisitos
+## Pré-requisitos (instalar antes de tudo)
 
-- Node.js 22+
-- Docker + Docker Compose
+- [Node.js 22+](https://nodejs.org/en/download) — na tela de instalação, marque a opção "Add to PATH"
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) — após instalar, abra o Docker Desktop antes de usar
+- [Git](https://git-scm.com/download/win) — deixe todas as opções padrão na instalação
 
-## Instalação e execução
+## Passo a passo para rodar
 
-### Modo desenvolvimento
+### 1. Clonar o repositório
+
+Abra o **PowerShell** ou **Git Bash** e rode:
+```bash
+git clone https://github.com/LeonardoGentil/Residencia3.git
+cd Residencia3
+```
+
+### 2. Instalar dependências
 ```bash
 npm install
+```
+
+### 3. Rodar em modo desenvolvimento
+```bash
 npm run dev
 ```
 
-### Modo Docker
+Se aparecer `✅ Filazero MCP Server rodando...` está funcionando!
+
+### 4. Rodar com Docker
+
+Certifique-se que o **Docker Desktop está aberto e rodando**, depois:
 ```bash
 docker compose up
 ```
 
-## Variáveis de ambiente
+Se aparecer `✅ Filazero MCP Server rodando...` está funcionando!
 
-| Variável | Default | Descrição |
-|---|---|---|
-| FILAZERO_API_URL | https://api.staging.filazero.net | URL base da API |
-| FILAZERO_APP_ORIGIN | https://app.filazero.net | Origin para headers |
-| MCP_SERVER_PORT | 3000 | Porta do servidor |
-| RATE_LIMIT_RPM | 30 | Requisições/min |
-| CACHE_TTL_COMPANIES | 300 | TTL cache em segundos |
-| LOG_LEVEL | info | Nível de log |
+## Testar com MCP Inspector
+
+Com o servidor rodando, abra outro terminal e rode:
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+Vai abrir uma URL no terminal. Acesse ela no navegador.
+
+Configure assim:
+- **Transport**: STDIO
+- **Command**: npx
+- **Arguments**: tsx src/index.ts
+- Clique em **Connect**
+
+Depois clique em **Tools → List Tools** para ver as tools disponíveis.
 
 ## Tools disponíveis
 
@@ -46,29 +71,36 @@ docker compose up
 
 ## Fluxo de agendamento
 
-1. `list_companies` → lista empresas
-2. `get_company_services` → serviços da empresa
-3. `get_available_dates` → dias disponíveis
-4. `get_available_sessions` → horários do dia
+1. `list_companies` → lista empresas disponíveis
+2. `get_company_services` → serviços da empresa escolhida
+3. `get_available_dates` → dias com vagas no mês
+4. `get_available_sessions` → horários disponíveis no dia
 5. `get_booking_form` → campos do formulário
 6. `schedule_appointment` → emite o ticket
 7. `check_ticket_status` → confirma o agendamento
 
-## Conectar ao Claude Desktop
+## Variáveis de ambiente
 
-Adicione ao arquivo `claude_desktop_config.json`:
-```json
-{
-  "mcpServers": {
-    "filazero": {
-      "command": "npx",
-      "args": ["tsx", "/caminho/para/filazero-mcp/src/index.ts"]
-    }
-  }
-}
+Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo:
+```
+FILAZERO_API_URL=https://api.staging.filazero.net
+FILAZERO_APP_ORIGIN=https://app.filazero.net
+MCP_SERVER_PORT=3000
+RATE_LIMIT_RPM=30
+CACHE_TTL_COMPANIES=300
+LOG_LEVEL=info
 ```
 
-## Testar com MCP Inspector
-```bash
-npx @modelcontextprotocol/inspector
-```
+## Problemas comuns
+
+**Erro: `npm` não encontrado**
+→ Reinstale o Node.js e marque a opção "Add to PATH"
+
+**Erro: `docker compose` não encontrado**
+→ Abra o Docker Desktop e aguarde ele iniciar completamente
+
+**Erro: `tsx` não encontrado**
+→ Rode `npm install` novamente na pasta do projeto
+
+**Porta já em uso**
+→ Mude o valor de `MCP_SERVER_PORT` no arquivo `.env`
