@@ -91,6 +91,52 @@ CACHE_TTL_COMPANIES=300
 LOG_LEVEL=info
 ```
 
+
+
+## Verificar se está tudo funcionando
+
+### Teste rápido via terminal
+
+Com o servidor rodando (`npm run dev`), abra outro terminal e rode:
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+Acesse a URL que aparecer no navegador e siga os passos:
+
+1. **Transport**: STDIO
+2. **Command**: npx
+3. **Arguments**: tsx src/index.ts
+4. Clique em **Connect**
+5. Deve aparecer **Connected** e **filazero-mcp Version: 1.0.0** no canto esquerdo
+
+### Testar a API de verdade
+
+1. Clique na aba **Tools**
+2. Clique em **List Tools** — devem aparecer 8 tools
+3. Clique em **list_companies**
+4. Clique em **Run Tool**
+5. Deve retornar uma lista de empresas em JSON
+
+Se retornou empresas = **tudo funcionando!** ✅
+
+### Testar os Resources
+
+1. Clique na aba **Resources**
+2. Clique em **List Resources**
+3. Devem aparecer 3 resources:
+   - `filazero://categories`
+   - `filazero://ticket-lifecycle`
+   - `filazero://scheduling-flow`
+
+### Testar os Prompts
+
+1. Clique na aba **Prompts**
+2. Clique em **List Prompts**
+3. Devem aparecer 2 prompts:
+   - `agendar-atendimento`
+   - `consultar-agendamento`
+
 ## Problemas comuns
 
 **Erro: `npm` não encontrado**
